@@ -1,0 +1,32 @@
+RewriteEngine On
+RewriteCond %{HTTP} off
+RewriteRule .* http://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+DirectoryIndex index.php
+<IfModule mod_rewrite.c>
+
+    RewriteEngine On
+    RewriteBase /
+
+    RewriteRule ^$ public/index.php [L]
+
+    RewriteRule ^((?!public/).*)$ public/$1 [L,NC]
+
+</IfModule>
+#Disable index view
+options -Indexes
+
+#hide a Specifuc File
+
+<Files .env>
+order allow,deny
+Deny from all
+</Files>
+
+Options +FollowSymLinks -Indexes
+RewriteEngine On
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [L]

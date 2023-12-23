@@ -1,0 +1,2 @@
+<input type="checkbox" class="check-box-id switchery" data-color="danger" data-switchery="true" value="<?php echo e($id); ?>">
+<?php /**PATH /var/www/html/transactions-mangament/resources/views/backend/includes/tables/checkbox.blade.php ENDPATH**/ ?>
