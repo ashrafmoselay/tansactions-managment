@@ -59,7 +59,7 @@ return [
 
     // USERS
     'users' => 'المستخدمين',
-    'the user'=>'المستخدم',
+    'the user' => 'المستخدم',
     'user' => 'مستخدم',
 
     // DEPARTMENTS
@@ -163,6 +163,12 @@ return [
 
     'tasks' => 'المهام',
     'task' => 'مهمة',
-    'the task' => 'المهمة'
+    'the task' => 'المهمة',
+
+    'transfers' => 'التحويلات',
+    'transfer' => 'تحويل',
+    'the transfer' => 'التحويل',
+    'to_users' => 'المستلم',
+    'from_users' => 'الراسل'
 
 ];

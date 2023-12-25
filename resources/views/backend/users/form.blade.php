@@ -53,8 +53,8 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
                 </div>
-                <input type="number" step="any" class="form-control" name="balance"
-                    value="{{ $row->balance ?? old('balance') }}" placeholder="@lang('inputs.balance')" required>
+                <input readonly type="number" step="any" class="form-control" name="balance"
+                    value="{{ $row->balance ?? 0 }}" placeholder="@lang('inputs.balance')" required>
             </div>
             <x-validation-error input='balance' />
         </div>

@@ -26,6 +26,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->text('mobile_token')->nullable();
             $table->rememberToken();
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -37,16 +38,18 @@ return new class extends Migration
             $table->string('type'); // income, outcome.
             $table->decimal('amount', 10, 2);
             $table->text('note')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
 
         Schema::create('transfers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('from_user_id');
-            $table->unsignedBigInteger('to_user_id');
+            $table->foreignId('from_user_id')->constrained('users')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('to_user_id')->constrained('users')->cascadeOnUpdate()->nullOnDelete();
             $table->decimal('amount', 10, 2);
             $table->string('status')->comment('Pending-Approved-Rejected');
             $table->text('status_note')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

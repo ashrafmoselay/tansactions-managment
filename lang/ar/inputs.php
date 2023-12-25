@@ -173,5 +173,12 @@ return [
 
 	// TRANSACTIONS
 	'transactionable_type' => 'Transactionable Type',
-    'amount'=>'المبلغ'
+    'amount'=>'المبلغ',
+
+
+	// TRANSFERS
+	'status_note' => 'التعليق',
+    'from_user_id'=>'الراسل',
+    'to_user_id'=>'المستلم', 
+    'code'=>'الكود'
 ];

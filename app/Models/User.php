@@ -13,11 +13,12 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
 use Faker\Factory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles,SoftDeletes;
 
     const CODE_LENGTH = 6;
 
@@ -121,5 +122,31 @@ class User extends Authenticatable
             $code = (Factory::create())->randomNumber(self::CODE_LENGTH, true);
         } while ( self::query()->where('code', $code)->exists() );
         return $code;
+    }
+
+
+    public function tranfers()
+    {
+        $relation = $this->hasMany(Transfer::class, 'from_user_id', 'id');
+        return $relation;
+    }
+
+    protected function gettotalTranfersAttribute()
+    {
+        $total = $this->tranfers->sum('amount');
+        return $total;
+    }
+
+
+    public function transactions()
+    {
+        $relation = $this->hasMany(Transaction::class, 'user_id', 'id');
+        return $relation;
+    }
+
+    protected function gettotalTransactionsAttribute()
+    {
+        $total = $this->transactions->sum('amount');
+        return $total;
     }
 }

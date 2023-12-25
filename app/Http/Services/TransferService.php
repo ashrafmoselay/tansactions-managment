@@ -3,22 +3,19 @@
 namespace App\Http\Services;
 
 use Exception;
-use App\Models\Transaction;
+use App\Models\Transfer;
 use App\Traits\UploadFile;
 
-class TransactionService
+class TransferService
 {
     use UploadFile;
 
     public function handle($request, $id = null)
     {
         try {
-           $this->saveFiles($request);
-           $request['user_id'] = $request['user_id']??auth()->user()->id;
-            if($request['type']=='سحب'){
-                $request['amount'] = -$request['amount'];
-            }
-            return Transaction::updateOrCreate(['id' => $id], $request);
+            $this->saveFiles($request);
+
+            return Transfer::updateOrCreate(['id' => $id], $request);
         } catch (Exception $e) {
             return $e;
         }
@@ -29,7 +26,7 @@ class TransactionService
         foreach (request()->allFiles() as $key => $value) {
             if ($value && isset($request[$key])) {
                 [$width, $height] = getimagesize($value);
-                $request[$key] = $this->uploadImage($value, (new Transaction)->getTable(), $width, $height);
+                $request[$key] = $this->uploadImage($value, (new Transfer)->getTable(), $width, $height);
             }
         }
     }

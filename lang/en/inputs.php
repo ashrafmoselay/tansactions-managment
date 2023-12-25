@@ -153,8 +153,13 @@ return [
     'description' => 'Description',
     'status' => 'Status',
     'created_at' => 'تاريخ الإنشاء',
-    'balance'=>'Balance'
+    'balance'=>'Balance',
 
 
 	// TRANSACTIONS
+
+
+	// TRANSFERS
+	'amount' => 'Amount',
+	'status_note' => 'Status Note',
 ];

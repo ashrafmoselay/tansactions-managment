@@ -40,6 +40,11 @@ class MenuSeeder extends Seeder
                 'icon' => "fas fa-money-bill",
             ],
             [
+                'name' => ["en" => "Traansfers", "ar" => "التحويلات"],
+                'route' => "transfers.index",
+                'icon' => "fas fa-exchange",
+            ],
+            [
                 'name' => ["en" => "Settings", "ar" => "الإعدادات"],
                 'route' => "settings.index",
                 'icon' => "fas fa-gear",

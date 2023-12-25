@@ -81,8 +81,8 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
                 </div>
-                <input type="number" step="any" class="form-control" name="balance"
-                    value="<?php echo e($row->balance ?? old('balance')); ?>" placeholder="<?php echo app('translator')->get('inputs.balance'); ?>" required>
+                <input readonly type="number" step="any" class="form-control" name="balance"
+                    value="<?php echo e($row->balance ?? 0); ?>" placeholder="<?php echo app('translator')->get('inputs.balance'); ?>" required>
             </div>
             <?php if (isset($component)) { $__componentOriginalc98491cb9bb70c86f130d42eb4cfbfb99411b399 = $component; } ?>
 <?php $component = App\View\Components\ValidationError::resolve(['input' => 'balance'] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>

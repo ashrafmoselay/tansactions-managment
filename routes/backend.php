@@ -133,3 +133,7 @@ Route::post('social_medias/{oauth_social}/column/{column}/toggle', 'SocialMediaC
 
 Route::resource('transactions', 'TransactionController');
 Route::post('transactions/multidelete', 'TransactionController@multidelete')->name('transactions.multidelete');
+
+Route::resource('transfers', 'TransferController'); 
+Route::post('transfers/multidelete', 'TransferController@multidelete')->name('transfers.multidelete'); 
+Route::any('transfers/updateStatus/{id}', 'TransferController@updateStatus')->name('transfers.updateStatus'); 

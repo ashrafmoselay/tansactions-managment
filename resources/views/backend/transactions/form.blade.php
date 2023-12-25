@@ -8,22 +8,20 @@
 
 
 <div class='row'>
-    @if (canUser('users-index'))
-    <div  class="col-md-12">
+    <div style="{{ !canUser('users-index')?'display: none':''  }}"  class="col-md-12">
         {{-- START users --}}
         <div class="form-group">
             <label>@lang('inputs.select-data', ['data' => trans('menu.the user')])</label>
             <select class="select2 form-control" id="users" name="user_id" data-placeholder="--- @lang('inputs.select-data', ['data' => trans('menu.the user')]) ---">
                 <option></option>
                 @foreach ($users as $id => $name)
-                    <option value="{{ $id }}"  @selected(isset($row) && $row->user_id == $id)>{{ $name }}</option>
+                    <option  value="{{ $id }}"  @selected((isset($row) && $row->user_id == $id)|| (!isset($row) && $loop->first))>{{ $name }}</option>
                 @endforeach
             </select>
             <x-validation-error input='user_id' />
         </div>
         {{-- END users --}}
     </div>
-    @endif
 
     <div class="col-md-6">
         {{-- START transaction_date --}}

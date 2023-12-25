@@ -26,36 +26,45 @@ class UserDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->addColumn('check', 'backend.includes.tables.checkbox')
-            ->orderColumn('department_id', function($query, $order) {
-                return $query->whereHas('department', function($query) use($order) {
+
+            ->addColumn('totalTransfer', function (User $row) {
+                $link = '<a class="btn btn-danger" target="_blank" href="' . route('dashboard.transfers.index') . '?user_id=' . $row->id . '">' . $row->total_tranfers . '</a>';
+                return $link;
+            })
+            ->addColumn('totalTransaction', function (User $row) {
+                $link = '<a class="btn btn-success" target="_blank" href="' . route('dashboard.transactions.index') . '?user_id=' . $row->id . '">' . $row->total_transactions . '</a>';
+                return $link;
+            })
+            ->orderColumn('department_id', function ($query, $order) {
+                return $query->whereHas('department', function ($query) use ($order) {
                     return $query->orderBy('title', strtoupper($order));
                 });
             })
-            ->editColumn('department_id', function(User $user) {
+            ->editColumn('department_id', function (User $user) {
                 return $user->department_id
-                        ? "<a href='".routeHelper('departments.edit', $user->department_id)."' title='Edit Department' target='_blank'>".($user->department->title ?? "")."</a>"
-                        : "";
+                    ? "<a href='" . routeHelper('departments.edit', $user->department_id) . "' title='Edit Department' target='_blank'>" . ($user->department->title ?? "") . "</a>"
+                    : "";
             })
             ->filterColumn('department_id', function ($query, $keywords) {
-                return $query->whereHas('department', function($query) use($keywords) {
+                return $query->whereHas('department', function ($query) use ($keywords) {
                     return $query->where('title', 'LIKE', "%$keywords%");
                 });
             })
-            ->editColumn('image', function(User $user) {
+            ->editColumn('image', function (User $user) {
                 $view = new PreviewImage($user->image, $user->name);
                 return $view->render()->with($view->data());
             })
-            ->editColumn('name', function(User $user) {
+            ->editColumn('name', function (User $user) {
                 $view = new LinkTag(routeHelper('users.show', $user), $user->name, trans('buttons.cover'), 'btn-link');
                 return $view->render()->with($view->data());
             })
-            ->editColumn('logged_in', function(User $user) {
-                if (! $user->logged_in || ! canUser('users-forceLogout')) return '';
+            ->editColumn('logged_in', function (User $user) {
+                if (!$user->logged_in || !canUser('users-forceLogout')) return '';
                 $view = new LinkTag(routeHelper('users.force.logout', ['id' => $user->id]), '', trans('menu.logout'), 'btn-sm btn-danger do-single-process', 'fa-solid fa-arrow-right-from-bracket');
                 return $view->render()->with($view->data());
             })
             ->editColumn('action', 'backend.includes.buttons.table-buttons')
-            ->rawColumns(['action', 'check', 'image', 'department_id', 'logged_in']);
+            ->rawColumns(['action', 'check', 'image', 'totalTransfer', 'totalTransaction', 'department_id', 'logged_in']);
     }
 
     /**
@@ -67,7 +76,7 @@ class UserDataTable extends DataTable
     public function query(User $model)
     {
         //return $model->newQuery()->hasManager()->exceptAuth()->filter();
-        return $model->newQuery()->where('id','<>',1)->exceptAuth()->filter();
+        return $model->newQuery()->where('id', '<>', 1)->exceptAuth()->filter();
     }
 
     /**
@@ -78,28 +87,28 @@ class UserDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-        ->setTableId('users-table')
-        ->columns($this->getColumns())
-        ->minifiedAjax()
-        ->dom('Bfrtip')
-        ->setTableAttribute('class', $this->tableClass)
-        ->lengthMenu($this->lengthMenu)
-        ->pageLength($this->pageLength)
-        ->buttons([
-            $this->getCreateButton(),
-            $this->getDeleteButton(),
-            $this->getImportButton(),
-            $this->getExportButton(),
-            $this->getSearchButton(),
-            $this->getCloseButton(),
-            $this->getPageLengthButton()
-        ])
-        ->responsive(true)
-        ->language($this->translateDatatables())
-        ->parameters(
-            $this->initComplete('1, 2,3,5')
-        )
-        ->orderBy(1);
+            ->setTableId('users-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Bfrtip')
+            ->setTableAttribute('class', $this->tableClass)
+            ->lengthMenu($this->lengthMenu)
+            ->pageLength($this->pageLength)
+            ->buttons([
+                $this->getCreateButton(),
+                $this->getDeleteButton(),
+                $this->getImportButton(),
+                $this->getExportButton(),
+                $this->getSearchButton(),
+                $this->getCloseButton(),
+                $this->getPageLengthButton()
+            ])
+            ->responsive(true)
+            ->language($this->translateDatatables())
+            ->parameters(
+                $this->initComplete('1, 2,3,5')
+            )
+            ->orderBy(1);
     }
 
     /**
@@ -114,6 +123,8 @@ class UserDataTable extends DataTable
             Column::make('code')->title('#')->width('70px'),
             Column::make('name')->title(trans('inputs.name')),
             Column::make('balance')->title(trans('inputs.balance')),
+            Column::make('totalTransfer')->title('التحويلات'),
+            Column::make('totalTransaction')->title('المعاملات'),
             Column::make('email')->title(trans('inputs.email')),
             Column::make('image')->title(trans('title.avatar'))->footer(trans('title.avatar'))->orderable(false),
             Column::make('department_id')->title(trans('menu.department'))->footer(trans('menu.department')),

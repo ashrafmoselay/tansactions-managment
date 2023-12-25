@@ -5,8 +5,8 @@
 </div>
 
 <div class="d-flex">
-    <img src="<?php echo e(asset($row->image)); ?>" class="img-thumbnail preview-modal-image">
-
+    <img src="<?php echo e(asset($row->image ?? "app-assets/backend/images/portfolio/portfolio-1.jpg")); ?>" class="img-thumbnail preview-modal-image">
+    
     <div class="table-responsive w-100 ml-2">
         <table class="table table-bordered mb-0">
             <thead>

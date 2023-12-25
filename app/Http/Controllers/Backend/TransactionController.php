@@ -7,6 +7,7 @@ use App\Http\Controllers\BackendController;
 use App\Models\Transaction;
 use App\Http\Services\TransactionService;
 use App\Http\Requests\TransactionRequest;
+use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +21,16 @@ class TransactionController extends BackendController
     public bool $use_button_ajax = true;
     public string $view_sub_path = '';
 
+    public function __construct()
+    {
+        view()->composer(['backend.transactions.index'], function ($view) {
+            $users = User::pluck('name','id');
+            $view->with([
+                'users' => $users,
+            ]);
+        });
+        parent::__construct();
+    }
     public function index()
     {
         
@@ -92,9 +103,14 @@ class TransactionController extends BackendController
 
     public function append(): array
     {
+        $query = \App\Models\User::query();
+        if(!canUser('users.index')){
+            $query->where('id',auth()->user()->id); 
+        }
+        $list = $query->pluck('name', 'id');
         return [
 
-            'users' => \App\Models\User::pluck('name', 'id'),
+            'users' => $list,
         ];
     }
 
